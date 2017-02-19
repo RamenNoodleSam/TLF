@@ -3,3 +3,9 @@
 ################################################################################
 
 *.TTF
+/Assignment/Assignment/Data
+/Assignment/Assignment/Media/Images
+/Assignment/Assignment/Debug
+/Assignment/Debug
+/Assignment/Assignment.VC.db
+/Assignment/Assignment.VC.VC.opendb
