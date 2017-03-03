@@ -3,14 +3,16 @@
 #include "GlobalAssetPool.h"
 
 Button::Button() :
-	m_background({200, 200}),
+	m_background({ 200, 200 }),
 	m_pCommandOnClick(nullptr)
 {
 	m_text.setFont(GlobalAssetPool::getInstance()->m_font);
 	m_text.setString("<DEFAULT TEXT>");
-	m_text.setCharacterSize(24);	
+	m_text.setCharacterSize(16);
+	m_text.setStyle(m_text.Bold);
+	m_text.setFillColor({ 255, 140, 0 });
 
-	m_background.setFillColor(sf::Color::Red);
+	m_background.setFillColor({ 20, 20, 20 });
 }
 
 Button::Button(Command* pCommandOnClick, const sf::Vector2f& position, const sf::Vector2f& size, const sf::String& textString) :
@@ -18,11 +20,13 @@ Button::Button(Command* pCommandOnClick, const sf::Vector2f& position, const sf:
 {
 	m_text.setFont(GlobalAssetPool::getInstance()->m_font);
 	m_text.setString(textString);
-	m_text.setCharacterSize(24);	
+	m_text.setCharacterSize(24);
+	m_text.setStyle(m_text.Bold);
+	m_text.setFillColor({ 255, 140, 0 });
 
 	m_background.setSize(size);
 	m_background.setPosition(position);
-	m_background.setFillColor(sf::Color::Red);
+	m_background.setFillColor({ 20, 20, 20 });
 
 	repositionText();
 }
@@ -59,7 +63,7 @@ Button& Button::operator=(const Button& rhs) {
 			m_pCommandOnClick = rhs.m_pCommandOnClick->clone();
 		}
 	}
-	
+
 	return *this;
 }
 
@@ -105,9 +109,20 @@ void Button::setCommand(Command* pCommandOnClick) {
 	m_pCommandOnClick = pCommandOnClick;
 }
 
-bool Button::click(int x, int y) {
+void Button::setBackgroundColour(const sf::Color& colour) {
+	m_background.setFillColor(colour);
+}
+
+void Button::setTextColour(const sf::Color& colour) {
+	m_text.setFillColor(colour);
+}
+
+bool Button::click(int x, int y, sf::RenderWindow& window) {
+	//convert the (x,y) coords to world coordinates (in case of window scaling)
+	sf::Vector2f realCoords = window.mapPixelToCoords({ x, y });
+
 	//if not in bounds, we don't care about this Button
-	if (!m_background.getGlobalBounds().contains(x, y)) {
+	if (!m_background.getGlobalBounds().contains(realCoords)) {
 		return false;
 	}
 
@@ -124,9 +139,12 @@ bool Button::click(int x, int y) {
 }
 
 void Button::repositionText() {
+	//set the origin based on text boundaries
 	sf::FloatRect textRect = m_text.getLocalBounds();
 	m_text.setOrigin(textRect.left + textRect.width / 2.0f,
 					 textRect.top + textRect.height / 2.0f);
+
+	//set position based on text boundaries AND Button boundaries
 	m_text.setPosition(m_background.getPosition() +
 					   sf::Vector2f(m_background.getSize().x / 2.0f, m_background.getSize().y / 2.0f));
 }

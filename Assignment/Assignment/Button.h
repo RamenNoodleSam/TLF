@@ -6,7 +6,6 @@
  *				and accepts a Command to invoke when clicked.
  */
 
-#include <memory>
 #include <SFML/Graphics.hpp>
 #include "Command.h"
 
@@ -20,20 +19,27 @@ public:
 	Button& operator=(Button&& rhs);
 	~Button();
 
+	//draw assets to provided RenderWindow
 	void draw(sf::RenderWindow& window);
 
+	//mutators
 	void setPosition(const sf::Vector2f& position);
 	void setSize(const sf::Vector2f& size);
 	void setString(const sf::String& textString);
 	void setCommand(Command* pCommandOnClick);
+	void setBackgroundColour(const sf::Color& colour);
+	void setTextColour(const sf::Color& colour);
 
-	bool click(int x, int y);
+	//returns true if coordinates are in Button bounds,
+	//also invokes the linked Command
+	bool click(int x, int y, sf::RenderWindow& window);
 
 private:
 	sf::RectangleShape	m_background;
 	sf::Text			m_text;
 	Command*			m_pCommandOnClick;
 
+	//repositions the text on the Button based on size of the button and text
 	void repositionText();
 };
 

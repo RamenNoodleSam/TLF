@@ -10,6 +10,9 @@
 #include <SFML/Graphics.hpp>
 #include "StateManager.h"
 
+//prototype
+class NeuralNetwork;
+
 class Core {
 public:
 	Core();
@@ -20,10 +23,13 @@ public:
 
 private:
 	//SFML window as render target
-	sf::RenderWindow m_window;
+	sf::RenderWindow	m_window;
 
 	//state manager handling specific screen logic
-	StateManager m_stateManager;
+	StateManager		m_stateManager;
+
+	//the artificial neural network
+	NeuralNetwork*		m_pNeuralNetwork;
 };
 
 #endif

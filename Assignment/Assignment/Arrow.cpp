@@ -1,4 +1,5 @@
 #include "Arrow.h"
+#include "GlobalAssetPool.h"
 
 const float radToDeg = 180 / 3.141592f;
 
@@ -7,6 +8,13 @@ Arrow::Arrow() :
 	m_arrowStart({50, 50}),
 	m_arrowEnd({150, 50})
 {
+	setColour({ 80, 80, 80 });
+
+	m_text.setFont(GlobalAssetPool::getInstance()->m_font);
+	m_text.setCharacterSize(16);
+	m_text.setStyle(m_text.Bold);
+	m_text.setFillColor({ 255, 140, 0 });
+
 	setWidth(5.0f);
 	constructArrow();
 }
@@ -16,13 +24,24 @@ Arrow::Arrow(const sf::Vector2f& startPoint, const sf::Vector2f& endPoint, float
 	m_arrowStart(startPoint),
 	m_arrowEnd(endPoint)
 {
+	setColour({80, 80, 80});
+
+	m_text.setFont(GlobalAssetPool::getInstance()->m_font);
+	m_text.setCharacterSize(16);
+	m_text.setStyle(m_text.Bold);
+	m_text.setFillColor({ 255, 140, 0 });
+
 	setWidth(width);
 	constructArrow();
 }
 
-void Arrow::draw(sf::RenderWindow& window) {
+void Arrow::drawArrow(sf::RenderWindow& window) {
 	window.draw(m_arrowBody);
-	window.draw(m_arrowHead);
+	//window.draw(m_arrowHead);
+}
+
+void Arrow::drawText(sf::RenderWindow& window) {
+	window.draw(m_text);
 }
 
 void Arrow::setStartPoint(const sf::Vector2f& startPoint) {
@@ -41,30 +60,53 @@ void Arrow::setWidth(float width) {
 	constructArrow();
 }
 
+void Arrow::setColour(const sf::Color& colour) {
+	m_arrowBody.setFillColor(colour);
+	m_arrowHead.setFillColor(colour);
+}
+
+void Arrow::setString(const sf::String& textString) {
+	m_text.setString(textString);
+	constructArrow();
+}
+
 void Arrow::constructArrow() {
 	//calculate how long the arrow should be to connect 2 points
 	float length = sqrtf((m_arrowEnd.x - m_arrowStart.x) * (m_arrowEnd.x - m_arrowStart.x) +
 						 (m_arrowEnd.y - m_arrowStart.y) * (m_arrowEnd.y - m_arrowStart.y));
 
 	//rotate and position the body of the arrow first
+	m_arrowBody.setOrigin({ 0.f, m_arrowBody.getSize().y / 2.0f });
 	m_arrowBody.setRotation(radToDeg * atan2f((m_arrowEnd.y - m_arrowStart.y), (m_arrowEnd.x - m_arrowStart.x)));
 	m_arrowBody.setPosition(m_arrowStart);
 
 	//set the length of the arrow
 	m_arrowBody.setSize({ length, m_arrowBody.getSize().y });
 
-	//set origin of arrow head based on radius
+	/****************ARROW HEAD****************/
+
+	//rotate arrow head 90 degrees about it's centre so it starts off by "facing" right
 	m_arrowHead.setOrigin(m_arrowHead.getRadius(), m_arrowHead.getRadius());
+	m_arrowHead.setRotation(90.0f);
 
 	//position arrow head based on which way the arrow is pointing and the width of the arrow body, before rotation
 	float width = m_arrowBody.getSize().y;
 	if (m_arrowStart.x < m_arrowEnd.x) {
-		m_arrowHead.setPosition(m_arrowEnd + sf::Vector2f(0.f, width / 2.0f));
+		m_arrowHead.setPosition(m_arrowEnd + sf::Vector2f(0.f, width / 2.0f - m_arrowHead.getRadius()));
 	}
 	else {
-		m_arrowHead.setPosition(m_arrowEnd - sf::Vector2f(0.f, width / 2.0f));
+		m_arrowHead.setPosition(m_arrowEnd - sf::Vector2f(0.f, width / 2.0f - m_arrowHead.getRadius()));
 	}
 
-	//finally, rotate the arrow head (+90 so the "tip" of the arrow head is originally facing right)
-	m_arrowHead.setRotation(m_arrowBody.getRotation() + 90.0f);
+	//set origin of arrow head to be the same as the body so their rotations are uniform
+	m_arrowHead.setOrigin(m_arrowBody.getOrigin());
+
+	//match rotation about the same origin
+	m_arrowHead.rotate(m_arrowBody.getRotation());
+
+	/****************TEXT****************/
+
+	m_text.setRotation(m_arrowBody.getRotation());
+
+	m_text.setPosition(m_arrowStart + sf::Vector2f((m_arrowEnd.x - m_arrowStart.x) * 0.2f, (m_arrowEnd.y - m_arrowStart.y) * 0.2f));
 }

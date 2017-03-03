@@ -11,6 +11,7 @@ GlobalAssetPool* GlobalAssetPool::getInstance() {
 }
 
 GlobalAssetPool::GlobalAssetPool() {
+	//only loads font once per instantiation
 	if (!m_font.loadFromFile("Media/Fonts/font.ttf")) {
 		std::cout << "Failed to load font from file, check \"Media/Fonts/font.ttf\" exists." << std::endl;
 	}

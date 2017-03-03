@@ -21,10 +21,11 @@ public:
 
 	sf::String getString() const;
 
-	bool click(int x, int y);
+	bool click(int x, int y, sf::RenderWindow& window);
+	void focus();
+	void defocus();
 
-	void handleEvents(const sf::Event& event);
-
+	bool handleEvents(const sf::Event& event, sf::RenderWindow& window);
 
 private:
 	sf::RectangleShape	m_background;

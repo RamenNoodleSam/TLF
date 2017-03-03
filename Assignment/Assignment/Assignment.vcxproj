@@ -18,6 +18,51 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Arrow.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ChangeStateCommand.cpp" />
+    <ClCompile Include="Core.cpp" />
+    <ClCompile Include="GlobalAssetPool.cpp" />
+    <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="LoadNetworkCommand.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="NetworkEditorState.cpp" />
+    <ClCompile Include="NetworkLayer.cpp" />
+    <ClCompile Include="NeuralNetwork.cpp" />
+    <ClCompile Include="Neuron.cpp" />
+    <ClCompile Include="SaveNetworkCommand.cpp" />
+    <ClCompile Include="Slider.cpp" />
+    <ClCompile Include="StateManager.cpp" />
+    <ClCompile Include="TestCommand.cpp" />
+    <ClCompile Include="TestingState.cpp" />
+    <ClCompile Include="TextField.cpp" />
+    <ClCompile Include="TrainCommand.cpp" />
+    <ClCompile Include="TrainingState.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Arrow.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="ChangeStateCommand.h" />
+    <ClInclude Include="Command.h" />
+    <ClInclude Include="Core.h" />
+    <ClInclude Include="GlobalAssetPool.h" />
+    <ClInclude Include="Graph.h" />
+    <ClInclude Include="LoadNetworkCommand.h" />
+    <ClInclude Include="NetworkEditorState.h" />
+    <ClInclude Include="NetworkLayer.h" />
+    <ClInclude Include="NeuralNetwork.h" />
+    <ClInclude Include="Neuron.h" />
+    <ClInclude Include="SaveNetworkCommand.h" />
+    <ClInclude Include="Slider.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="StateManager.h" />
+    <ClInclude Include="TestCommand.h" />
+    <ClInclude Include="TestingState.h" />
+    <ClInclude Include="TextField.h" />
+    <ClInclude Include="TrainCommand.h" />
+    <ClInclude Include="TrainingState.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2B920727-04EF-44E0-A407-D2BA2355F944}</ProjectGuid>
     <RootNamespace>Assignment</RootNamespace>
@@ -115,28 +160,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="Command.cpp" />
-    <ClCompile Include="Core.cpp" />
-    <ClCompile Include="GlobalAssetPool.cpp" />
-    <ClCompile Include="IntroState.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Arrow.cpp" />
-    <ClCompile Include="StateManager.cpp" />
-    <ClCompile Include="TextField.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Arrow.h" />
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="Command.h" />
-    <ClInclude Include="Core.h" />
-    <ClInclude Include="GlobalAssetPool.h" />
-    <ClInclude Include="IntroState.h" />
-    <ClInclude Include="State.h" />
-    <ClInclude Include="StateManager.h" />
-    <ClInclude Include="TextField.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -6,17 +6,16 @@ const sf::Uint32 BACKSPACE = 8;
 const sf::Uint32 RETURN = 13;
 
 TextField::TextField() :
-	m_background({150, 30}),
+	m_background({ 150, 20 }),
 	m_hasFocus(false)
 {
 	m_text.setFont(GlobalAssetPool::getInstance()->m_font);
 	m_text.setString("Enter text...");
-	m_text.setCharacterSize(24);
-	m_text.setFillColor(sf::Color(128, 128, 128));
+	m_text.setCharacterSize(16);
+	m_text.setStyle(m_text.Bold);
+	m_text.setFillColor({ 255, 140, 0 });
 
-	m_background.setFillColor(sf::Color::White);
-	m_background.setOutlineColor(sf::Color::Red);
-	m_background.setOutlineThickness(2.0f);
+	m_background.setFillColor({ 20, 20, 20 });
 }
 
 void TextField::draw(sf::RenderWindow& window) {
@@ -41,49 +40,78 @@ sf::String TextField::getString() const {
 	return m_text.getString();
 }
 
-bool TextField::click(int x, int y) {
+bool TextField::click(int x, int y, sf::RenderWindow& window) {
+	//convert the (x,y) coords to world coordinates (in case of window scaling)
+	sf::Vector2f realCoords = window.mapPixelToCoords({ x, y });
+
 	//if not in bounds, we don't care about this TextField
-	if (!m_background.getGlobalBounds().contains(x, y)) {
+	if (!m_background.getGlobalBounds().contains(realCoords)) {
 		return false;
 	}
 
 	//handle defocus of other TextField
 	if (m_pFocussed != nullptr) {
-		if (m_pFocussed->getString().isEmpty()) {
-			m_pFocussed->setString("Enter text...");
-		}
+		m_pFocussed->defocus();
 	}
 
 	//set the focus to this TextField
 	m_pFocussed = this;
-	if (m_text.getString() == "Enter text...") {
-		m_text.setString("");
-	}
+	focus();
+
 	return true;
 }
 
-void TextField::handleEvents(const sf::Event& event) {
+void TextField::focus() {
+	if (m_text.getString() == "Enter text...") {
+		m_text.setString("");
+	}
+
+	m_text.setFillColor({ 20, 20, 20 });
+
+	m_background.setFillColor({ 255, 140, 0 });
+}
+
+void TextField::defocus() {
+	if (m_text.getString().isEmpty()) {
+		m_text.setString("Enter text...");
+	}
+
+	m_pFocussed = nullptr;
+
+	m_text.setFillColor({ 255, 140, 0 });
+
+	m_background.setFillColor({ 20, 20, 20 });
+}
+
+bool TextField::handleEvents(const sf::Event& event, sf::RenderWindow& window) {
 	if (m_pFocussed == this) {
 		//Text entered event
 		if (event.type == sf::Event::TextEntered) {
-			//0-9 are accepted characters in the string
-			if (event.text.unicode >= '1' && event.text.unicode <= '9') {
+			//alphanumeric characters accepted, as well as '.' for decimal values
+			if (event.text.unicode >= '0' && event.text.unicode <= '9' || 
+				event.text.unicode == '.'							   ||
+				event.text.unicode >= 'a' && event.text.unicode <= 'z' ||
+				event.text.unicode >= 'A' && event.text.unicode <= 'Z') 
+			{
 				m_text.setString(m_text.getString() + static_cast<char>(event.text.unicode));
-			} 
+			}
 			//check for backspace to delete last character
 			else if (event.text.unicode == BACKSPACE) {
 				m_text.setString(m_text.getString().substring(0, m_text.getString().getSize() - 1));
 			}
 			//check for return to submit string
 			else if (event.text.unicode == RETURN) {
-				std::cout << "String entered: " << m_text.getString().toAnsiString() << std::endl;
+				defocus();
+				return true;
 			}
 		}
 	}
 	else {
 		//Left click event
 		if (event.mouseButton.button == sf::Mouse::Left) {
-			click(event.mouseButton.x, event.mouseButton.y);
+			click(event.mouseButton.x, event.mouseButton.y, window);
 		}
 	}
+
+	return false;
 }
