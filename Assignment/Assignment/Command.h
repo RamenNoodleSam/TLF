@@ -6,8 +6,6 @@
  *				Used to add a layer of indirection where needed, specifically Button clicks.
  */
 
-#include <string>
-
 class Command {
 public:
 	virtual ~Command() {};

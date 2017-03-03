@@ -8,17 +8,15 @@ Slider::Slider() :
 	m_currentValue(0.5f),
 	m_sliding(false)
 {
+	//set origins of components
 	m_background.setOrigin(0.f, -10.f);
 	m_handle.setOrigin(10.f, 0.f);
+
+	//set background colours
 	m_background.setFillColor({ 20, 20, 20 });
 	m_handle.setFillColor({ 255, 140, 0 });
 }
 
-Slider::Slider(float min, float max) {
-
-}
-
-//draw assets to provided RenderWindow
 void Slider::draw(sf::RenderWindow& window) {
 	window.draw(m_background);
 	window.draw(m_handle);
@@ -60,9 +58,12 @@ bool Slider::handleEvents(const sf::Event& event, sf::RenderWindow& window) {
 			//convert the (x,y) coords to world coordinates (in case of window scaling)
 			float mouseX = window.mapPixelToCoords({ event.mouseMove.x, 0 }).x;
 
+			//if too far to the right, set to the maximum X value allowed
 			if (mouseX > m_background.getPosition().x + m_background.getSize().x) {
 				m_handle.setPosition(m_background.getPosition().x + m_background.getSize().x, m_background.getPosition().y + m_background.getSize().y * 0.5f);
 			}
+
+			//if too far left, set to the minimum X value allowed
 			else if (mouseX < m_background.getPosition().x) {
 				m_handle.setPosition(m_background.getPosition().x, m_background.getPosition().y + m_background.getSize().y * 0.5f);
 			}

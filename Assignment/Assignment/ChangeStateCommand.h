@@ -2,9 +2,9 @@
 #define CHANGESTATECOMMAND_H
 
 /* Filename: ChangeStateCommand.h
-* Description: Concrete Command to switch from one State to another.
-*				StateID defined in "StateManager.h"
-*/
+ * Description: Concrete Command to switch from one State to another.
+ *				StateID defined in "StateManager.h"
+ */
 
 #include "Command.h"
 #include "StateManager.h"

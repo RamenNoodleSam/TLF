@@ -19,6 +19,7 @@ public:
 	State(StateManager* pStateManager) : m_pStateManager(pStateManager) {}
 	virtual ~State() {}
 	
+	//pure virtual methods that must be overridden
 	virtual void handleEvents(const sf::Event&, sf::RenderWindow&) = 0;
 	virtual void update() = 0;
 	virtual void draw(sf::RenderWindow&) = 0;

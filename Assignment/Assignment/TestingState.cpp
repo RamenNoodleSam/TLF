@@ -12,6 +12,8 @@ TestingState::TestingState(StateManager* pStateManager) :
 	m_pNeuralNetwork = NeuralNetwork::getInstance();
 	m_pNeuralNetwork->setLinkToTestingState(this);
 
+	//initialise all graphical components of the screen
+
 	Button button1;
 	button1.setPosition({ 0, 0 });
 	button1.setSize({ 267, 40 });
@@ -43,8 +45,6 @@ TestingState::TestingState(StateManager* pStateManager) :
 	button4.setString({ "Test Network" });
 	button4.setCommand(new TestCommand);
 	m_buttons.push_back(button4);
-
-	createNetworkStructure();
 }
 
 TestingState::~TestingState() {
@@ -95,6 +95,7 @@ void TestingState::draw(sf::RenderWindow& window) {
 void TestingState::setTestOutputs(const std::vector<sf::String>& outputs) {
 	m_text.clear();
 
+	//initialise text for each output
 	for (size_t i = 0; i < outputs.size(); ++i) {
 		sf::Text text;
 		text.setFont(GlobalAssetPool::getInstance()->m_font);
@@ -108,11 +109,15 @@ void TestingState::setTestOutputs(const std::vector<sf::String>& outputs) {
 }
 
 void TestingState::createNetworkStructure() {
+	//get latest layer config and bias in each layer
 	std::vector<unsigned int> layerConfiguration = m_pNeuralNetwork->getNeuronsInLayers();
 	std::vector<unsigned int> biasInLayers = m_pNeuralNetwork->getBiasInLayers();
 
+	//remove any existing information on layers and the connections between neurons
 	m_layers.clear();
+	m_connections.clear();
 
+	//calculate the spacing in the x axis using the number of layers
 	float layerSpacing = 800.f / layerConfiguration.size();
 
 	//create layers and add neurons to them
@@ -123,59 +128,69 @@ void TestingState::createNetworkStructure() {
 		m_layers.push_back(networkLayer);
 
 		for (unsigned int neuron = 0; neuron < layerConfiguration[layer]; ++neuron) {
+			//if possible provide the input and output values
 			sf::String stringValue("");
 			std::ostringstream oss;
-			if (layer == 0) {
-				oss << std::setprecision(2) << std::fixed << m_pNeuralNetwork->getTrainingData().get_input()[neuron][0];
-				stringValue = oss.str();
-			}
-			else if (layer == layerConfiguration.size() - 1) {
-				oss << std::setprecision(2) << std::fixed << m_pNeuralNetwork->getTrainingData().get_output()[neuron][0];
-				stringValue = oss.str();
+			if (m_pNeuralNetwork->getTrainingData() != nullptr){
+				if (layer == 0) {
+					oss << std::setprecision(2) << std::fixed << m_pNeuralNetwork->getTrainingData()->get_input()[neuron][0];
+					stringValue = oss.str();
+				}
+				else if (layer == layerConfiguration.size() - 1) {
+					oss << std::setprecision(2) << std::fixed << m_pNeuralNetwork->getTrainingData()->get_output()[neuron][0];
+					stringValue = oss.str();
+				}
 			}
 			m_layers[layer].addNeuron(stringValue, false);
 		}
 	}
 
-	//add biases to layers if any
-	for (unsigned int layer = 0; layer < biasInLayers.size(); ++layer) {
+	if (m_layers.size()){
+		//add biases to layers if any
+		for (unsigned int layer = 0; layer < biasInLayers.size(); ++layer) {
 
-		//for every bias in that layer
-		for (unsigned int y = 0; y < biasInLayers[layer]; ++y) {
-			std::ostringstream oss; 
-			oss << std::setprecision(2) << std::fixed << 1.0f;
-			m_layers[layer].addNeuron(oss.str(), true);
+			//for every bias in that layer
+			for (unsigned int y = 0; y < biasInLayers[layer]; ++y) {
+				std::ostringstream oss;
+				oss << std::setprecision(2) << std::fixed << 1.0f;
+				m_layers[layer].addNeuron(oss.str(), true);
+			}
 		}
-	}
 
-	std::vector<FANN::connection> connections = m_pNeuralNetwork->getConnections();
-	m_connections.clear();
+		//receive the latest connection data
+		std::vector<FANN::connection> connections = m_pNeuralNetwork->getConnections();
 
-	unsigned int startingID = 0;
-	for (unsigned int i = 0; i < m_layers.size(); ++i) {
-		startingID = m_layers[i].setIDs(startingID);
-	}
-
-	for (const auto& iter : connections) {
-		Neuron* pFromNeuron = nullptr;
-		Neuron* pToNeuron = nullptr;
-
+		//provide each Neuron with a unique ID
+		unsigned int startingID = 0;
 		for (unsigned int i = 0; i < m_layers.size(); ++i) {
-			if (pFromNeuron == nullptr) 
-				pFromNeuron = m_layers[i].getNeuronWithID(iter.from_neuron);
-			if (pToNeuron == nullptr)
-				pToNeuron = m_layers[i].getNeuronWithID(iter.to_neuron);
+			startingID = m_layers[i].setIDs(startingID);
 		}
 
-		Arrow arrow(pFromNeuron->getRightPoint(), pToNeuron->getLeftPoint(), 3.f);
+		//for each connection that exists
+		for (const auto& iter : connections) {
+			Neuron* pFromNeuron = nullptr;
+			Neuron* pToNeuron = nullptr;
 
-		std::ostringstream oss;
-		oss << std::setprecision(3) << std::fixed << iter.weight;
-		arrow.setString(oss.str());
-		if (fann_abs(iter.weight) > 2.0f)
-			arrow.setColour({ 255, 140, 0 });
-		else
-			arrow.setColour({ 80, 80, 80 });
-		m_connections.push_back(arrow);
+			//find the neurons that are associated with it
+			for (unsigned int i = 0; i < m_layers.size(); ++i) {
+				if (pFromNeuron == nullptr) 
+					pFromNeuron = m_layers[i].getNeuronWithID(iter.from_neuron);
+				if (pToNeuron == nullptr)
+					pToNeuron = m_layers[i].getNeuronWithID(iter.to_neuron);
+			}
+
+			//create an arrow to go between the two appropriate neurons
+			Arrow arrow(pFromNeuron->getRightPoint(), pToNeuron->getLeftPoint(), 3.f);
+
+			//if the weight is greater than 2, change the arrow colour to orange
+			std::ostringstream oss;
+			oss << std::setprecision(3) << std::fixed << iter.weight;
+			arrow.setString(oss.str());
+			if (fann_abs(iter.weight) > 2.0f)
+				arrow.setColour({ 255, 140, 0 });
+			else
+				arrow.setColour({ 80, 80, 80 });
+			m_connections.push_back(arrow);
+		}
 	}
 }

@@ -13,17 +13,21 @@ class TextField {
 public:
 	TextField();
 
+	//draw assets to provided RenderWindow
 	void draw(sf::RenderWindow& window);
 
+	//mutators
 	void setPosition(const sf::Vector2f& position);
 	void setSize(const sf::Vector2f& size);
 	void setString(const sf::String& textString);
-
-	sf::String getString() const;
-
-	bool click(int x, int y, sf::RenderWindow& window);
 	void focus();
 	void defocus();
+
+	//accesors
+	sf::String getString() const;
+
+	//returns true if Enter was pressed (indicating text is being submitted)
+	bool click(int x, int y, sf::RenderWindow& window);
 
 	bool handleEvents(const sf::Event& event, sf::RenderWindow& window);
 

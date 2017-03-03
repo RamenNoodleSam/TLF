@@ -9,12 +9,14 @@ TextField::TextField() :
 	m_background({ 150, 20 }),
 	m_hasFocus(false)
 {
+	//initialise text
 	m_text.setFont(GlobalAssetPool::getInstance()->m_font);
 	m_text.setString("Enter text...");
 	m_text.setCharacterSize(16);
 	m_text.setStyle(m_text.Bold);
 	m_text.setFillColor({ 255, 140, 0 });
 
+	//initialise background of TextField
 	m_background.setFillColor({ 20, 20, 20 });
 }
 
@@ -62,6 +64,7 @@ bool TextField::click(int x, int y, sf::RenderWindow& window) {
 }
 
 void TextField::focus() {
+	//on focus, default text is removed and colour is changed
 	if (m_text.getString() == "Enter text...") {
 		m_text.setString("");
 	}
@@ -72,12 +75,14 @@ void TextField::focus() {
 }
 
 void TextField::defocus() {
+	//on defocus, if no text is added the default text is set
 	if (m_text.getString().isEmpty()) {
 		m_text.setString("Enter text...");
 	}
 
 	m_pFocussed = nullptr;
 
+	//colour is changed back to the typical style
 	m_text.setFillColor({ 255, 140, 0 });
 
 	m_background.setFillColor({ 20, 20, 20 });

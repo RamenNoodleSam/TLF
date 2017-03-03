@@ -2,6 +2,9 @@
 #include "ChangeStateCommand.h"
 #include "LoadNetworkCommand.h"
 #include "SaveNetworkCommand.h"
+#include "AddLayerCommand.h"
+#include "ResetLayersCommand.h"
+#include "ApplyStructureChangesCommand.h"
 #include "GlobalAssetPool.h"
 #include "NeuralNetwork.h"
 
@@ -9,6 +12,8 @@ NetworkEditorState::NetworkEditorState(StateManager* pStateManager) :
 	State(pStateManager)
 {
 	m_pNeuralNetwork = NeuralNetwork::getInstance();
+
+	//initialise all graphical components of the state
 
 	Button button1;
 	button1.setPosition({ 0, 0 });
@@ -39,7 +44,7 @@ NetworkEditorState::NetworkEditorState(StateManager* pStateManager) :
 	text1.setCharacterSize(16);
 	text1.setStyle(text1.Bold);
 	text1.setFillColor({ 255, 140, 0 });
-	text1.setPosition({ 20, 60 });
+	text1.setPosition({ 20, 410 });
 	m_text.push_back(text1);
 
 	sf::Text text2;
@@ -48,38 +53,56 @@ NetworkEditorState::NetworkEditorState(StateManager* pStateManager) :
 	text2.setCharacterSize(16);
 	text2.setStyle(text2.Bold);
 	text2.setFillColor({ 255, 140, 0 });
-	text2.setPosition({ 20, 100 });
+	text2.setPosition({ 20, 450 });
 	m_text.push_back(text2);
 
-	m_networkFile.setPosition({ 160, 100 });
+	m_networkFile.setPosition({ 160, 450 });
 
 	Button button4;
-	button4.setPosition({ 340, 95 });
+	button4.setPosition({ 340, 445 });
 	button4.setSize({ 60, 30 });
 	button4.setString({ "Load" });
-	button4.setCommand(new LoadNetworkCommand);
+	button4.setCommand(new LoadNetworkCommand(&m_networkFile));
 	m_buttons.push_back(button4);
 
 	Button button5;
-	button5.setPosition({ 420, 95 });
+	button5.setPosition({ 420, 445 });
 	button5.setSize({ 60, 30 });
 	button5.setString({ "Save" });
-	button5.setCommand(new SaveNetworkCommand);
+	button5.setCommand(new SaveNetworkCommand(&m_networkFile));
 	m_buttons.push_back(button5);
 
+	sf::Text text3;
+	text3.setFont(GlobalAssetPool::getInstance()->m_font);
+	text3.setString("Number of neurons: ");
+	text3.setCharacterSize(16);
+	text3.setStyle(text3.Bold);
+	text3.setFillColor({ 255, 140, 0 });
+	text3.setPosition({ 20, 60 });
+	m_text.push_back(text3);
+
+	m_numberOfNeurons.setPosition({ 220, 60 });
+
 	Button button6;
-	button6.setPosition({ 420, 150 });
-	button6.setSize({ 20, 20 });
-	button6.setString({ "+" });
-	button6.setCommand(new ChangeState(m_pStateManager, e_Testing));
+	button6.setPosition({ 20, 100 });
+	button6.setSize({ 120, 30 });
+	button6.setString({ "Add Layer" });
+	button6.setCommand(new AddLayerCommand(&m_layers, &m_numberOfNeurons));
 	m_buttons.push_back(button6);
 
 	Button button7;
-	button7.setPosition({ 395, 150 });
-	button7.setSize({ 20, 20 });
-	button7.setString({ "-" });
-	button7.setCommand(new ChangeState(m_pStateManager, e_Testing));
+	button7.setPosition({ 20, 155 });
+	button7.setSize({ 150, 30 });
+	button7.setString({ "Reset Layers" });
+	button7.setCommand(new ResetLayersCommand(&m_layers));
 	m_buttons.push_back(button7);
+
+	Button button8;
+	button8.setPosition({ 20, 210 });
+	button8.setSize({ 150, 30 });
+	button8.setString({ "Apply Changes" });
+	button8.setCommand(new ApplyStructureChangesCommand(&m_layers));
+	m_buttons.push_back(button8);
 }
 
 NetworkEditorState::~NetworkEditorState() {
@@ -99,9 +122,14 @@ void NetworkEditorState::handleEvents(const sf::Event& event, sf::RenderWindow& 
 		}
 	}
 
+	//handle events for the network file TextField
 	if (m_networkFile.handleEvents(event, window)) {
 		m_pNeuralNetwork->setNetworkFile(m_networkFile.getString());
 	}
+
+
+	//handle events for the number of neurons TextField
+	m_numberOfNeurons.handleEvents(event, window);
 }
 
 void NetworkEditorState::update() {
@@ -118,4 +146,5 @@ void NetworkEditorState::draw(sf::RenderWindow& window) {
 	}
 
 	m_networkFile.draw(window);
+	m_numberOfNeurons.draw(window);
 }

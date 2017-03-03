@@ -6,31 +6,37 @@ Button::Button() :
 	m_background({ 200, 200 }),
 	m_pCommandOnClick(nullptr)
 {
+	//initialise text
 	m_text.setFont(GlobalAssetPool::getInstance()->m_font);
 	m_text.setString("<DEFAULT TEXT>");
 	m_text.setCharacterSize(16);
 	m_text.setStyle(m_text.Bold);
 	m_text.setFillColor({ 255, 140, 0 });
 
+	//initialise background of button
 	m_background.setFillColor({ 20, 20, 20 });
 }
 
 Button::Button(Command* pCommandOnClick, const sf::Vector2f& position, const sf::Vector2f& size, const sf::String& textString) :
 	m_pCommandOnClick(pCommandOnClick)
 {
+	//initialise text
 	m_text.setFont(GlobalAssetPool::getInstance()->m_font);
 	m_text.setString(textString);
 	m_text.setCharacterSize(24);
 	m_text.setStyle(m_text.Bold);
 	m_text.setFillColor({ 255, 140, 0 });
 
+	//initialise background of button
 	m_background.setSize(size);
 	m_background.setPosition(position);
 	m_background.setFillColor({ 20, 20, 20 });
 
+	//reposition the text
 	repositionText();
 }
 
+//copy constructor
 Button::Button(const Button& rhs) :
 	m_background(rhs.m_background),
 	m_text(rhs.m_text)
@@ -43,6 +49,7 @@ Button::Button(const Button& rhs) :
 	}
 }
 
+//move constructor
 Button::Button(Button&& rhs) :
 	m_background(rhs.m_background),
 	m_pCommandOnClick(rhs.m_pCommandOnClick),
@@ -51,6 +58,7 @@ Button::Button(Button&& rhs) :
 	rhs.m_pCommandOnClick = nullptr;
 }
 
+//copy assignment operator
 Button& Button::operator=(const Button& rhs) {
 	if (&rhs != this) {
 		m_background = rhs.m_background;
@@ -67,6 +75,7 @@ Button& Button::operator=(const Button& rhs) {
 	return *this;
 }
 
+//move assignment operator
 Button& Button::operator=(Button&& rhs) {
 	if (&rhs != this) {
 		m_background = rhs.m_background;

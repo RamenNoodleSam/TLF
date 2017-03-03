@@ -15,6 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Neuron.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AddLayerCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ApplyStructureChangesCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Arrow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -48,7 +57,7 @@
     <ClCompile Include="NeuralNetwork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Neuron.cpp">
+    <ClCompile Include="ResetLayersCommand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SaveNetworkCommand.cpp">
@@ -77,6 +86,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AddLayerCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ApplyStructureChangesCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Arrow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -111,6 +126,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Neuron.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResetLayersCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SaveNetworkCommand.h">

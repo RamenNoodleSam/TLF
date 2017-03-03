@@ -19,10 +19,12 @@ public:
 	TrainingState(StateManager* pStateManager);
 	~TrainingState();
 
+	//overridden virtual methods
 	virtual void handleEvents(const sf::Event& event, sf::RenderWindow& window);
 	virtual void update();
 	virtual void draw(sf::RenderWindow& window);
 
+	//mutators
 	void setMeanSquaredError(const sf::String& MSE);
 	void addPointToGraph(unsigned int epoch, float MSE);
 
@@ -43,9 +45,5 @@ private:
 	//link to neural network
 	NeuralNetwork*			m_pNeuralNetwork;
 };
-
-int training_callback(FANN::neural_net &net, FANN::training_data &train,
-					  unsigned int max_epochs, unsigned int epochs_between_reports,
-					  float desired_error, unsigned int epochs, void *user_data);
 
 #endif

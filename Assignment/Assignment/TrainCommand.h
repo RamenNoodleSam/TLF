@@ -3,6 +3,8 @@
 
 /* Filename: TrainCommand.h
  * Description: Concrete Command to initiate training for neural network.
+ *				A reference to a Graph is passed so that it can be updated
+ *				with points as training continues (1 point per report).
  */
 
 #include "Command.h"

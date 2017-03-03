@@ -10,7 +10,6 @@
 class Slider {
 public:
 	Slider();
-	Slider(float min, float max);
 
 	//draw assets to provided RenderWindow
 	void draw(sf::RenderWindow& window);

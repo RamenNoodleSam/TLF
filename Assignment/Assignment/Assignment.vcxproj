@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AddLayerCommand.cpp" />
+    <ClCompile Include="ApplyStructureChangesCommand.cpp" />
     <ClCompile Include="Arrow.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ChangeStateCommand.cpp" />
@@ -31,6 +33,7 @@
     <ClCompile Include="NetworkLayer.cpp" />
     <ClCompile Include="NeuralNetwork.cpp" />
     <ClCompile Include="Neuron.cpp" />
+    <ClCompile Include="ResetLayersCommand.cpp" />
     <ClCompile Include="SaveNetworkCommand.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="StateManager.cpp" />
@@ -41,6 +44,8 @@
     <ClCompile Include="TrainingState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AddLayerCommand.h" />
+    <ClInclude Include="ApplyStructureChangesCommand.h" />
     <ClInclude Include="Arrow.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ChangeStateCommand.h" />
@@ -53,6 +58,7 @@
     <ClInclude Include="NetworkLayer.h" />
     <ClInclude Include="NeuralNetwork.h" />
     <ClInclude Include="Neuron.h" />
+    <ClInclude Include="ResetLayersCommand.h" />
     <ClInclude Include="SaveNetworkCommand.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="State.h" />

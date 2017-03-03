@@ -2,8 +2,8 @@
 #define TESTCOMMAND_H
 
 /* Filename: TestCommand.h
-* Description: Concrete Command to initiate testing of the neural network.
-*/
+ * Description: Concrete Command to initiate testing of the neural network.
+ */
 
 #include "Command.h"
 #include "StateManager.h"

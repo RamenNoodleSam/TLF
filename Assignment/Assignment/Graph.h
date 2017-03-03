@@ -1,6 +1,10 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+/* Filename: Graph.h
+ * Description: Encapsulates the assets and functionality of a Graph.
+ */
+
 #include <SFML/Graphics.hpp>
 #include <vector>
 
@@ -8,16 +12,17 @@ class Graph {
 public:
 	Graph();
 	
+	//draw assets to provided RenderWindow
 	void draw(sf::RenderWindow& window);
 
+	//mutators
 	void setPosition(const sf::Vector2f& position);
 	void setSize(const sf::Vector2f& size);
-
 	void setLabelX(const sf::String& string);
 	void setLabelY(const sf::String& string);
-
 	void addPoint(const sf::Vector2f& point);
 
+	//clears all points from the Graph
 	void resetPoints();
 
 private:

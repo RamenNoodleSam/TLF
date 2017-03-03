@@ -12,18 +12,14 @@ Core::Core() {
 
 	//initialise neural network
 	m_pNeuralNetwork = NeuralNetwork::getInstance();
-	m_pNeuralNetwork->addLayer(2);
-	m_pNeuralNetwork->addLayer(3);
-	m_pNeuralNetwork->addLayer(1);
-	if (!m_pNeuralNetwork->createNetwork()) {
-		throw std::runtime_error("Failed to instantiate artificial neural network!");
-	}
 
 	//initialise states
 	m_stateManager.init();
 }
 
 Core::~Core() {
+	//if these exist delete them, if they don't exist they will be created before being immediately deleted.
+	//application termination is not a performance critical section of code so this is fine
 	delete GlobalAssetPool::getInstance();
 	delete NeuralNetwork::getInstance();
 }

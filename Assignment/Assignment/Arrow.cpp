@@ -8,13 +8,16 @@ Arrow::Arrow() :
 	m_arrowStart({50, 50}),
 	m_arrowEnd({150, 50})
 {
+	//set colour of the arrow components
 	setColour({ 80, 80, 80 });
 
+	//initialise text
 	m_text.setFont(GlobalAssetPool::getInstance()->m_font);
 	m_text.setCharacterSize(16);
 	m_text.setStyle(m_text.Bold);
 	m_text.setFillColor({ 255, 140, 0 });
 
+	//construct arrow using default information
 	setWidth(5.0f);
 	constructArrow();
 }
@@ -24,19 +27,24 @@ Arrow::Arrow(const sf::Vector2f& startPoint, const sf::Vector2f& endPoint, float
 	m_arrowStart(startPoint),
 	m_arrowEnd(endPoint)
 {
+	//set colour of the arrow components
 	setColour({80, 80, 80});
 
+	//initialise text
 	m_text.setFont(GlobalAssetPool::getInstance()->m_font);
 	m_text.setCharacterSize(16);
 	m_text.setStyle(m_text.Bold);
 	m_text.setFillColor({ 255, 140, 0 });
 
+	//construct arrow using passed information
 	setWidth(width);
 	constructArrow();
 }
 
 void Arrow::drawArrow(sf::RenderWindow& window) {
 	window.draw(m_arrowBody);
+
+	//removed arrow head for clarify of diagrams on the Testing screen
 	//window.draw(m_arrowHead);
 }
 

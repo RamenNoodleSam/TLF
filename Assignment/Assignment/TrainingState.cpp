@@ -12,6 +12,8 @@ TrainingState::TrainingState(StateManager* pStateManager) :
 	m_pNeuralNetwork = NeuralNetwork::getInstance();
 	m_pNeuralNetwork->setLinkToTrainingState(this);
 
+	//initialise the graphical components of the screen
+
 	Button button1;
 	button1.setPosition({ 0, 0 });
 	button1.setSize({ 267, 40 });
@@ -124,28 +126,34 @@ void TrainingState::handleEvents(const sf::Event& event, sf::RenderWindow& windo
 		}
 	}
 
+	//handle events for the TextField representing max epochs
 	if (m_maxEpochs.handleEvents(event, window)) {
 		m_pNeuralNetwork->setMaxEpochs(std::stoi(m_maxEpochs.getString().toAnsiString()));
 	}
 
+	//handle events for the TextField representing report frequency
 	if (m_reportFrequency.handleEvents(event, window)) {
 		m_pNeuralNetwork->setReportFrequency(std::stoi(m_reportFrequency.getString().toAnsiString()));
 	}
 
+	//handle events for the TextField representing desired error
 	if (m_desiredError.handleEvents(event, window)) {
 		m_pNeuralNetwork->setDesiredError(std::stof(m_desiredError.getString().toAnsiString()));
 	}
 
+	//handle events for the TextField representing training file name
 	if (m_trainingFile.handleEvents(event, window)) {
 		m_pNeuralNetwork->loadTrainingFile(m_trainingFile.getString());
 	}
 
+	//handle events for the TextField representing learning rate
 	if (m_learningRate.handleEvents(event, window)) {
 		m_pNeuralNetwork->setLearningRate(m_learningRate.getValue());
 	}
 }
 
 void TrainingState::update() {
+	//update the learning rate
 	std::ostringstream oss;
 	oss << std::setprecision(2) << std::fixed << m_learningRate.getValue();
 	m_learningRateText.setString("Learning Rate: " + oss.str());
@@ -175,5 +183,5 @@ void TrainingState::setMeanSquaredError(const sf::String& MSE) {
 }
 
 void TrainingState::addPointToGraph(unsigned int epoch, float MSE) {
-	m_graph.addPoint(sf::Vector2f(epoch, MSE));
+	m_graph.addPoint(sf::Vector2f((float)epoch, MSE));
 }

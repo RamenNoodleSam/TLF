@@ -9,8 +9,10 @@ TrainCommand::TrainCommand(Graph* pGraph) {
 }
 
 void TrainCommand::operator()() {
-	std::cout << "Resetting MSE and fail bits." << std::endl;
+	//reset points in the graph each time training starts
 	m_pGraph->resetPoints();
+
+	//reset weights of the network to start training fresh
 	m_pNeuralNetwork->resetWeights();
 	std::cout << "Starting network training..." << std::endl;
 	m_pNeuralNetwork->train();
